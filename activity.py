@@ -67,7 +67,7 @@ class Activity(activity.Activity):
         # save list button
         save = ToolButton('filesave')
         save.connect('clicked', self._save)
-        save.set_tooltip(_('New picture'))
+        save.set_tooltip(_('Save data'))
         toolbar_box.toolbar.insert(save, -1)
 
         # separator and stop button

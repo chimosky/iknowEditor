@@ -14,7 +14,7 @@ def save(l):
     f.write("CITIES = [\n")
     first = True
     for r in l:
-        #    (_('Bahía Blanca'), 386, 451, 2, -10, -14),
+        #    (_('name'), x, y, type, dx, dy),
         if first:
             first = False
         else:
