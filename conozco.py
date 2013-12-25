@@ -469,6 +469,7 @@ class Conozco():
         x = int(image.get_width() * scale)
         y = int(image.get_height() * scale)
         self.fondo = pygame.transform.scale(image, (x,y))
+        self.pantalla.fill((0,0,0))
         self.pantalla.blit(self.fondo, (shift_x, shift_y))
 
     def showName(self, text, pos, font, color=(0,0,0)):
@@ -478,6 +479,7 @@ class Conozco():
         self.pantalla.blit(t, r)
 
     def update_points(self, l):
+        self.pantalla.fill((0,0,0))
         self.pantalla.blit(self.fondo, (shift_x, shift_y))
         for p in l:
             name = p[0]

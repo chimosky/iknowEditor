@@ -61,9 +61,10 @@ class Data(gtk.TreeView):
 
     def remove_selected_value(self):
         path, column = self.get_cursor()
-        path = path[0]
-        model, iter = self.get_selection().get_selected()
-        self.model.remove(iter)
+        if path is not None:
+            path = path[0]
+            model, iter = self.get_selection().get_selected()
+            self.model.remove(iter)
         return path
 
     def update_selected_value(self, data):

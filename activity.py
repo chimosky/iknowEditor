@@ -58,6 +58,11 @@ class Activity(activity.Activity):
         add_point.set_tooltip(_("Add a point"))
         toolbar_box.toolbar.insert(add_point, -1)
 
+        rem_point = ToolButton("row-remove")
+        rem_point.connect("clicked", self._remove_point)
+        rem_point.set_tooltip(_("Remove the selected point"))
+        toolbar_box.toolbar.insert(rem_point, -1)
+
         # separator and stop button
         separator = gtk.SeparatorToolItem()
         separator.props.draw = False
@@ -122,6 +127,10 @@ class Activity(activity.Activity):
 
     def _add_point(self, widget, label="", value="City"):
         pos = self.labels_and_values.add_value(label, value)
+
+    def _remove_point(self, widget):
+        path = self.labels_and_values.remove_selected_value()
+        self._update_points()
 
     def _add_coor(self, pos):
         if self._image is not None:
