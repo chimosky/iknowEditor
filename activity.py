@@ -22,7 +22,7 @@ class Activity(activity.Activity):
 
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
-
+        self.init_vars()
         self.build_toolbar()
         self.actividad = conozco.Conozco(self)
         self.build_canvas()
@@ -31,6 +31,7 @@ class Activity(activity.Activity):
 
     def init_vars(self):
         self._image = None
+        self._places = {}
 
     def build_toolbar(self):
 
@@ -102,6 +103,8 @@ class Activity(activity.Activity):
         self._pygamecanvas.grab_focus()
         self._pygamecanvas.run_pygame(self.actividad.principal)
 
+
+
     def _new_picture(self, widget):
         try:
             chooser = ObjectChooser(parent=self)
@@ -119,15 +122,22 @@ class Activity(activity.Activity):
             #self.actividad.fondo = self._image
             #self.actividad.pantalla.blit(self._image, (0, 0))
 
-    def _add_point(self, widget, label="", value="0.0"):
+    def _add_point(self, widget, label="", value="City"):
         #data = (label, float(value))
         #if not data in self.chart_data:
         pos = self.labels_and_values.add_value(label, value)
+        print 'new pos', pos
+        self._places[pos] = [value, (0,0)]
         #self.chart_data.insert(pos, data)
         #self._update_chart_data()
 
     def _add_coor(self, pos):
-        self.labels_and_values.update_selected_value(pos)
+        path = self.labels_and_values.update_selected_value(pos)
+        self._places[path][1] = pos
+        self._update_points()
+
+    def _update_points(self):
+        self.actividad.update_points(self._places)
 
     def read_file(self, file_path):
         pass

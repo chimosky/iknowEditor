@@ -76,9 +76,9 @@ class Data(gtk.TreeView):
         self.model[path][0] = data
         #self.emit("label-changed", str(path), data)
         print 'remover', path, column
+        return path
 
     def _label_changed(self, cell, path, new_text, model):
-
 
         model[path][0] = new_text
 
@@ -86,35 +86,10 @@ class Data(gtk.TreeView):
 
     def _value_changed(self, cell, path, new_text, model, activity):
 
+        model[path][1] = new_text
 
-        is_number = True
-        number = new_text.replace(",", ".")
-        try:
-            float(number)
-        except ValueError:
-            is_number = False
+        self.emit("value-changed", str(path), new_text)
 
-        if is_number:
-            decimals = utils.get_decimals(str(float(number)))
-            new_text = locale.format('%.' + decimals + 'f', float(number))
-            model[path][1] = str(new_text)
 
-            self.emit("value-changed", str(path), number)
 
-        elif not is_number:
-            alert = Alert()
-
-            alert.props.title = _('Invalid Value')
-            alert.props.msg = \
-                           _('The value must be a number (integer or decimal)')
-
-            ok_icon = Icon(icon_name='dialog-ok')
-            alert.add_button(gtk.RESPONSE_OK, _('Ok'), ok_icon)
-            ok_icon.show()
-
-            alert.connect('response', lambda a, r: activity.remove_alert(a))
-
-            activity.add_alert(alert)
-
-            alert.show()
 

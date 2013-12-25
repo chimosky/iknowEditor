@@ -471,6 +471,19 @@ class Conozco():
         self.fondo = pygame.transform.scale(image, (x,y))
         self.pantalla.blit(self.fondo, (shift_x, shift_y))
 
+    def showName(self, text, pos, font, color=(0,0,0)):
+        t = font.render(text, 1, color)
+        self.pantalla.blit(t, pos)
+
+    def update_points(self, data):
+        self.pantalla.blit(self.fondo, (shift_x, shift_y))
+        for p in data:
+            info = data[p]
+            name = info[0]
+            pos = info[1]
+            self.pantalla.blit(self.simboloCiudad, pos)
+            self.showName(name, pos, self.fuente9)
+
     def principal(self):
         """Este es el loop principal del juego"""
         global scale, shift_x, shift_y
