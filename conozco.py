@@ -475,7 +475,7 @@ class Conozco():
     def showName(self, text, pos, font, color=(0,0,0)):
         t = font.render(text, 1, color)
         r = t.get_rect()
-        r.center = (pos[0], pos[1]-14)
+        r.center = (pos[0], pos[1])
         self.pantalla.blit(t, r)
 
     def update_points(self, l):
@@ -484,9 +484,12 @@ class Conozco():
         for p in l:
             name = p[0]
             pos = p[1]
-            self.showName(name, pos, self.fuente9)
-            pos = (pos[0] - 8, pos[1] - 8)
-            self.pantalla.blit(self.simboloCiudad, pos)
+            dx = int(p[2] * scale)
+            dy = int(p[3] * scale)
+            pos_n = (pos[0] + dx, pos[1] + dy)
+            pos_c = (pos[0] - 8, pos[1] - 8)
+            self.showName(name, pos_n, self.fuente9)
+            self.pantalla.blit(self.simboloCiudad, pos_c)
             
 
     def principal(self):

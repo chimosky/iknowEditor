@@ -92,8 +92,8 @@ class Activity(activity.Activity):
         
         self.labels_and_values = Data(self)
 
-        self.labels_and_values.connect("label-changed", self._label_changed)
-        self.labels_and_values.connect("value-changed", self._value_changed)
+        self.labels_and_values.connect("some-changed", self._some_changed)
+
 
         self.box2.add(self.labels_and_values)
 
@@ -125,8 +125,8 @@ class Activity(activity.Activity):
             self.actividad.set_background(self._image)
 
 
-    def _add_point(self, widget, label="", value="City"):
-        pos = self.labels_and_values.add_value(label, value)
+    def _add_point(self, widget, label="", value="City", dx='0', dy='-14'):
+        pos = self.labels_and_values.add_value(label, value, dx, dy)
 
     def _remove_point(self, widget):
         path = self.labels_and_values.remove_selected_value()
@@ -136,10 +136,7 @@ class Activity(activity.Activity):
         if self._image is not None:
             self.labels_and_values.update_selected_value(pos)
 
-    def _label_changed(self, treeview, path, new_label):
-        self._update_points()
-
-    def _value_changed(self, treeview, path, new_value):
+    def _some_changed(self, treeview, path, new_label):
         self._update_points()
 
     def _update_points(self):
