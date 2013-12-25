@@ -473,15 +473,19 @@ class Conozco():
 
     def showName(self, text, pos, font, color=(0,0,0)):
         t = font.render(text, 1, color)
-        self.pantalla.blit(t, pos)
+        r = t.get_rect()
+        r.center = (pos[0], pos[1]-14)
+        self.pantalla.blit(t, r)
 
     def update_points(self, l):
         self.pantalla.blit(self.fondo, (shift_x, shift_y))
         for p in l:
             name = p[0]
             pos = p[1]
-            self.pantalla.blit(self.simboloCiudad, pos)
             self.showName(name, pos, self.fuente9)
+            pos = (pos[0] - 8, pos[1] - 8)
+            self.pantalla.blit(self.simboloCiudad, pos)
+            
 
     def principal(self):
         """Este es el loop principal del juego"""
@@ -502,7 +506,7 @@ class Conozco():
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = event.pos
-                    self.pantalla.blit(self.simboloCiudad, pos)
+                    #self.pantalla.blit(self.simboloCiudad, pos)
                     self.parent._add_coor(pos)
                     print pos
 

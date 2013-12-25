@@ -121,13 +121,7 @@ class Activity(activity.Activity):
 
 
     def _add_point(self, widget, label="", value="City"):
-        #data = (label, float(value))
-        #if not data in self.chart_data:
         pos = self.labels_and_values.add_value(label, value)
-        print 'new pos', pos
-
-        #self.chart_data.insert(pos, data)
-        #self._update_chart_data()
 
     def _add_coor(self, pos):
         path = self.labels_and_values.update_selected_value(pos)
