@@ -17,6 +17,7 @@ from gettext import gettext as _
 import sugargame.canvas
 import conozco
 from points_list import Data
+from save_util import save
 
 class Activity(activity.Activity):
 
@@ -47,10 +48,10 @@ class Activity(activity.Activity):
         activity_button.show()
 
         # new pic button
-        new_game = ToolButton('new-pic')
-        new_game.connect('clicked', self._new_picture)
-        new_game.set_tooltip(_('New picture'))
-        toolbar_box.toolbar.insert(new_game, -1)
+        new_pic = ToolButton('new-pic')
+        new_pic.connect('clicked', self._new_picture)
+        new_pic.set_tooltip(_('New picture'))
+        toolbar_box.toolbar.insert(new_pic, -1)
 
         # add / remove point buttons
         add_point = ToolButton("row-insert")
@@ -62,6 +63,12 @@ class Activity(activity.Activity):
         rem_point.connect("clicked", self._remove_point)
         rem_point.set_tooltip(_("Remove the selected point"))
         toolbar_box.toolbar.insert(rem_point, -1)
+
+        # save list button
+        save = ToolButton('filesave')
+        save.connect('clicked', self._save)
+        save.set_tooltip(_('New picture'))
+        toolbar_box.toolbar.insert(save, -1)
 
         # separator and stop button
         separator = gtk.SeparatorToolItem()
@@ -107,7 +114,9 @@ class Activity(activity.Activity):
         self._pygamecanvas.grab_focus()
         self._pygamecanvas.run_pygame(self.actividad.principal)
 
-
+    def _save(self, widget):
+        l = self.labels_and_values.get_info()
+        save(l)
 
     def _new_picture(self, widget):
         try:
@@ -123,7 +132,6 @@ class Activity(activity.Activity):
         if f is not None:
             self._image = pygame.image.load(f)
             self.actividad.set_background(self._image)
-
 
     def _add_point(self, widget, label="", value="City", dx='0', dy='-14'):
         pos = self.labels_and_values.add_value(label, value, dx, dy)

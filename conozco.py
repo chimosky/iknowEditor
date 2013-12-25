@@ -483,11 +483,12 @@ class Conozco():
         self.pantalla.blit(self.fondo, (shift_x, shift_y))
         for p in l:
             name = p[0]
-            pos = p[1]
-            dx = int(p[2] * scale)
-            dy = int(p[3] * scale)
-            pos_n = (pos[0] + dx, pos[1] + dy)
-            pos_c = (pos[0] - 8, pos[1] - 8)
+            x = p[1]
+            y = p[2]
+            dx = int(p[3] * scale)
+            dy = int(p[4] * scale)
+            pos_n = (x + dx, y + dy)
+            pos_c = (x - 8, y - 8)
             self.showName(name, pos_n, self.fuente9)
             self.pantalla.blit(self.simboloCiudad, pos_c)
             

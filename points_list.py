@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import gtk
 import gobject
@@ -120,7 +122,7 @@ class Data(gtk.TreeView):
             dx = int(row[2])
             dy = int(row[3])
             if status:
-                l.append((name, pos, dx, dy))
+                l.append((name, pos[0], pos[1], dx, dy))
         return l
 
     def _validate_pos(self, pos):
