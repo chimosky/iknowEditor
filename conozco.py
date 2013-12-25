@@ -39,6 +39,9 @@ try:
 except:
     gtk_present = False
 
+X_SIZE = 800.0
+Y_SIZE = 900.0
+
 # constantes
 RADIO = 10
 RADIO2 = RADIO**2
@@ -338,21 +341,22 @@ class Conozco():
             pygame.display.set_caption(_(self.activity_name))
         self.anchoPantalla = self.pantalla.get_width()
         self.altoPantalla = self.pantalla.get_height()
+
         pygame.display.flip()
-        if self.anchoPantalla==1200 and self.altoPantalla==900:
+        if self.anchoPantalla==X_SIZE and self.altoPantalla==Y_SIZE:
             xo_resolution = True
             scale = 1
             shift_x = 0
             shift_y = 0
         else:
             xo_resolution = False
-            if self.anchoPantalla/1200.0<self.altoPantalla/900.0:
-                scale = self.anchoPantalla/1200.0
+            if self.anchoPantalla/X_SIZE<self.altoPantalla/Y_SIZE:
+                scale = self.anchoPantalla/X_SIZE
                 shift_x = 0
-                shift_y = int((self.altoPantalla-scale*900)/2)
+                shift_y = int((self.altoPantalla-scale*Y_SIZE)/2)
             else:
-                scale = self.altoPantalla/900.0
-                shift_x = int((self.anchoPantalla-scale*1200)/2)
+                scale = self.altoPantalla/Y_SIZE
+                shift_x = int((self.anchoPantalla-scale*X_SIZE)/2)
                 shift_y = 0
         # cargar imagenes generales
         self.camino_imagenes = os.path.join(CAMINORECURSOS,
@@ -475,7 +479,6 @@ class Conozco():
 
         self.loadCommons()
 
-        
         pygame.mouse.set_cursor((32,32), (1,1), *self.cursor)
 
         while 1:
@@ -484,7 +487,9 @@ class Conozco():
                 gtk.main_iteration()
 
             for event in pygame.event.get():
-                pass
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = event.pos
+                    print pos
 
             if self.fondo is not None:
                 self.pantalla.blit(self.fondo, (shift_x, shift_y))
@@ -494,12 +499,3 @@ class Conozco():
 
 
 
-
-
-def main():
-    juego = Conozco()
-    juego.principal()
-
-
-if __name__ == "__main__":
-    main()
