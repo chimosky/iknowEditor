@@ -475,12 +475,11 @@ class Conozco():
         t = font.render(text, 1, color)
         self.pantalla.blit(t, pos)
 
-    def update_points(self, data):
+    def update_points(self, l):
         self.pantalla.blit(self.fondo, (shift_x, shift_y))
-        for p in data:
-            info = data[p]
-            name = info[0]
-            pos = info[1]
+        for p in l:
+            name = p[0]
+            pos = p[1]
             self.pantalla.blit(self.simboloCiudad, pos)
             self.showName(name, pos, self.fuente9)
 

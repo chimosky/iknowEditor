@@ -81,7 +81,7 @@ class Data(gtk.TreeView):
     def _label_changed(self, cell, path, new_text, model):
 
         model[path][0] = new_text
-
+        
         self.emit("label-changed", str(path), new_text)
 
     def _value_changed(self, cell, path, new_text, model, activity):
@@ -90,6 +90,16 @@ class Data(gtk.TreeView):
 
         self.emit("value-changed", str(path), new_text)
 
-
-
+    def get_info(self):
+        l = []
+        for row in self.model:
+            name = row[1]
+            pos = row[0]
+            pos = pos.replace('(', '')
+            pos = pos.replace(')', '')
+            pos = pos.split(',')
+            pos = [float(pos[0]), float(pos[1])]
+            pos = (int(pos[0]), int(pos[1]))
+            l.append((name, pos))
+        return l
 

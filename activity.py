@@ -31,7 +31,8 @@ class Activity(activity.Activity):
 
     def init_vars(self):
         self._image = None
-        self._places = {}
+
+
 
     def build_toolbar(self):
 
@@ -83,16 +84,10 @@ class Activity(activity.Activity):
         self.table.attach(self.box1, 0, 1, 0, 1)
         self.table.attach(self.box2, 1, 2, 0, 1)
         
-
-        # buttons to add
-        #table = gtk.Table(5, 3, False)
         
         self.labels_and_values = Data(self)
         self.box2.add(self.labels_and_values)
 
-
-
-        #self.box2.add(table)
         self.set_canvas(self.table)
 
 
@@ -119,29 +114,24 @@ class Activity(activity.Activity):
         if f is not None:
             self._image = pygame.image.load(f)
             self.actividad.set_background(self._image)
-            #self.actividad.fondo = self._image
-            #self.actividad.pantalla.blit(self._image, (0, 0))
+
 
     def _add_point(self, widget, label="", value="City"):
         #data = (label, float(value))
         #if not data in self.chart_data:
         pos = self.labels_and_values.add_value(label, value)
         print 'new pos', pos
-        self._places[pos] = [value, (0,0)]
+
         #self.chart_data.insert(pos, data)
         #self._update_chart_data()
 
     def _add_coor(self, pos):
         path = self.labels_and_values.update_selected_value(pos)
-        self._places[path][1] = pos
+        
         self._update_points()
 
     def _update_points(self):
-        self.actividad.update_points(self._places)
+        l = self.labels_and_values.get_info()
+        self.actividad.update_points(l)
 
-    def read_file(self, file_path):
-        pass
-
-    def write_file(self, file_path):
-        pass
 
