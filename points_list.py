@@ -19,7 +19,7 @@ class Data(gtk.TreeView):
 
         # Label column
 
-        column = gtk.TreeViewColumn(_("Label"))
+        column = gtk.TreeViewColumn(_("Position"))
         label = gtk.CellRendererText()
         label.set_property('editable', True)
         label.connect("edited", self._label_changed, self.model)
@@ -30,7 +30,7 @@ class Data(gtk.TreeView):
 
         # Value column
 
-        column = gtk.TreeViewColumn(_("Value"))
+        column = gtk.TreeViewColumn(_("Name"))
         value = gtk.CellRendererText()
         value.set_property('editable', True)
         value.connect("edited", self._value_changed, self.model, activity)
@@ -57,49 +57,48 @@ class Data(gtk.TreeView):
                         self.get_column(1),
                         True)
 
-
-
         return path
 
     def remove_selected_value(self):
         path, column = self.get_cursor()
         path = path[0]
-
         model, iter = self.get_selection().get_selected()
         self.model.remove(iter)
-
         return path
 
     def update_selected_value(self, data):
         path, column = self.get_cursor()
-        path = path[0]
-        self.model[path][0] = data
-        #self.emit("label-changed", str(path), data)
-        print 'remover', path, column
-        return path
+        if path is not None:
+            path = path[0]
+            self.model[path][0] = data
+            self.emit("label-changed", str(path), data)
 
     def _label_changed(self, cell, path, new_text, model):
-
         model[path][0] = new_text
-        
         self.emit("label-changed", str(path), new_text)
 
     def _value_changed(self, cell, path, new_text, model, activity):
-
         model[path][1] = new_text
-
         self.emit("value-changed", str(path), new_text)
 
     def get_info(self):
         l = []
         for row in self.model:
             name = row[1]
-            pos = row[0]
+            status, pos = self._validate_pos(row[0])
+            if status:
+                l.append((name, pos))
+        return l
+
+    def _validate_pos(self, pos):
+        try:
             pos = pos.replace('(', '')
             pos = pos.replace(')', '')
             pos = pos.split(',')
             pos = [float(pos[0]), float(pos[1])]
             pos = (int(pos[0]), int(pos[1]))
-            l.append((name, pos))
-        return l
+        except Exception, err:
+            print err
+            return False, None
+        return True, pos
 

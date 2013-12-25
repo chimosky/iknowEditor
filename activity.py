@@ -124,8 +124,8 @@ class Activity(activity.Activity):
         pos = self.labels_and_values.add_value(label, value)
 
     def _add_coor(self, pos):
-        path = self.labels_and_values.update_selected_value(pos)
-        self._update_points()
+        if self._image is not None:
+            self.labels_and_values.update_selected_value(pos)
 
     def _label_changed(self, treeview, path, new_label):
         self._update_points()

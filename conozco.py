@@ -508,7 +508,7 @@ class Conozco():
                     pos = event.pos
                     #self.pantalla.blit(self.simboloCiudad, pos)
                     self.parent._add_coor(pos)
-                    print pos
+                    #print pos
 
 
 
