@@ -24,45 +24,8 @@ class Activity(activity.Activity):
         self.build_toolbar()
         self.actividad = conozco.Conozco()
         self.build_canvas()
+        self.run_canvas()
         self.show_all()
-
-        
-
-
-    def build_canvas(self):
-
-        self.table = gtk.Table(1, 2, False)
-
-        self.box1 = gtk.HBox()
-        self.box1.set_size_request(350, 350)
-        
-        self.box1.set_border_width(5)
-        self.box1.show()
-
-        box = gtk.VBox()
-        img = gtk.Image()
-        img.set_from_file("activity/fua-icon.svg")
-        img.show()
-        box.add(img)
-
-        self.box2 = gtk.HBox()
-        self.box2.set_size_request(200, 200)
-        self.box2.show()
-
-        self.table.attach(self.box1, 0, 1, 0, 1)
-        self.table.attach(box, 1, 2, 0, 1)
-        self.set_canvas(self.table)
-     
-        
-        self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
-        self.box1.add(self._pygamecanvas)
-        
-        #self.set_canvas(self._pygamecanvas)
-        self._pygamecanvas.grab_focus()
-        self._pygamecanvas.run_pygame(self.actividad.principal)
-
-        
-
 
     def build_toolbar(self):
 
@@ -85,6 +48,30 @@ class Activity(activity.Activity):
         stop_button = StopButton(self)
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
+
+    def build_canvas(self):
+
+        self.table = gtk.Table(1, 2, False)
+
+        self.box1 = gtk.HBox()
+        self.box1.set_size_request(350, 350)
+        self.box1.show()
+
+        self.box2 = gtk.HBox()
+        self.box2.set_size_request(50, 200)
+        self.box2.show()
+
+        self.table.attach(self.box1, 0, 1, 0, 1)
+        self.table.attach(self.box2, 1, 2, 0, 1)
+        self.set_canvas(self.table)
+
+    def run_canvas(self):
+        self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
+        self.box1.add(self._pygamecanvas)
+
+        self._pygamecanvas.grab_focus()
+        self._pygamecanvas.run_pygame(self.actividad.principal)
+
 
     def read_file(self, file_path):
         pass
