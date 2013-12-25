@@ -10,6 +10,7 @@ from sugar.graphics.toolbarbox import ToolbarBox
 from sugar.activity.widgets import ActivityToolbarButton
 from sugar.graphics.toolbutton import ToolButton
 from sugar.activity.widgets import StopButton
+from sugar.graphics.objectchooser import ObjectChooser
 
 from gettext import gettext as _
 
@@ -27,6 +28,9 @@ class Activity(activity.Activity):
         self.run_canvas()
         self.show_all()
 
+    def init_vars(self):
+        self._image = None
+
     def build_toolbar(self):
 
         self.max_participants = 1
@@ -39,6 +43,14 @@ class Activity(activity.Activity):
         toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
 
+        # new game button
+        new_game = ToolButton('new-pic')
+        new_game.connect('clicked', self._new_picture)
+        new_game.set_tooltip(_('New picture'))
+        toolbar_box.toolbar.insert(new_game, -1)
+
+
+        # separator and stop button
         separator = gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
@@ -72,6 +84,22 @@ class Activity(activity.Activity):
         self._pygamecanvas.grab_focus()
         self._pygamecanvas.run_pygame(self.actividad.principal)
 
+    def _new_picture(self, widget):
+        try:
+            chooser = ObjectChooser(parent=self)
+        except:
+            chooser = None
+        f = None
+        if chooser is not None:
+            result = chooser.run()
+            if result == gtk.RESPONSE_ACCEPT:
+                dsobject = chooser.get_selected_object()
+                f = dsobject.file_path
+        if f is not None:
+            self._image = pygame.image.load(f)
+            self.actividad.set_background(self._image)
+            #self.actividad.fondo = self._image
+            #self.actividad.pantalla.blit(self._image, (0, 0))
 
     def read_file(self, file_path):
         pass
