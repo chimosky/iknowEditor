@@ -86,6 +86,10 @@ class Activity(activity.Activity):
         
         
         self.labels_and_values = Data(self)
+
+        self.labels_and_values.connect("label-changed", self._label_changed)
+        self.labels_and_values.connect("value-changed", self._value_changed)
+
         self.box2.add(self.labels_and_values)
 
         self.set_canvas(self.table)
@@ -127,7 +131,12 @@ class Activity(activity.Activity):
 
     def _add_coor(self, pos):
         path = self.labels_and_values.update_selected_value(pos)
-        
+        self._update_points()
+
+    def _label_changed(self, treeview, path, new_label):
+        self._update_points()
+
+    def _value_changed(self, treeview, path, new_value):
         self._update_points()
 
     def _update_points(self):
