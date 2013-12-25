@@ -317,7 +317,8 @@ class Conozco():
                 del imagen0
         return imagen
 
-    def __init__(self):
+    def __init__(self, parent):
+        self.parent = parent
         file_activity_info = ConfigParser.ConfigParser()
         activity_info_path = os.path.abspath('activity/activity.info')
         file_activity_info.read(activity_info_path)
@@ -468,7 +469,7 @@ class Conozco():
         x = int(image.get_width() * scale)
         y = int(image.get_height() * scale)
         self.fondo = pygame.transform.scale(image, (x,y))
-        
+        self.pantalla.blit(self.fondo, (shift_x, shift_y))
 
     def principal(self):
         """Este es el loop principal del juego"""
@@ -489,10 +490,10 @@ class Conozco():
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = event.pos
+                    self.pantalla.blit(self.simboloCiudad, pos)
+                    self.parent._add_coor(pos)
                     print pos
 
-            if self.fondo is not None:
-                self.pantalla.blit(self.fondo, (shift_x, shift_y))
 
 
             pygame.display.flip()

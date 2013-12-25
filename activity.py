@@ -16,6 +16,7 @@ from gettext import gettext as _
 
 import sugargame.canvas
 import conozco
+from points_list import Data
 
 class Activity(activity.Activity):
 
@@ -23,7 +24,7 @@ class Activity(activity.Activity):
         activity.Activity.__init__(self, handle)
 
         self.build_toolbar()
-        self.actividad = conozco.Conozco()
+        self.actividad = conozco.Conozco(self)
         self.build_canvas()
         self.run_canvas()
         self.show_all()
@@ -43,12 +44,17 @@ class Activity(activity.Activity):
         toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
 
-        # new game button
+        # new pic button
         new_game = ToolButton('new-pic')
         new_game.connect('clicked', self._new_picture)
         new_game.set_tooltip(_('New picture'))
         toolbar_box.toolbar.insert(new_game, -1)
 
+        # add / remove point buttons
+        add_point = ToolButton("row-insert")
+        add_point.connect("clicked", self._add_point)
+        add_point.set_tooltip(_("Add a point"))
+        toolbar_box.toolbar.insert(add_point, -1)
 
         # separator and stop button
         separator = gtk.SeparatorToolItem()
@@ -75,7 +81,19 @@ class Activity(activity.Activity):
 
         self.table.attach(self.box1, 0, 1, 0, 1)
         self.table.attach(self.box2, 1, 2, 0, 1)
+        
+
+        # buttons to add
+        #table = gtk.Table(5, 3, False)
+        
+        self.labels_and_values = Data(self)
+        self.box2.add(self.labels_and_values)
+
+
+
+        #self.box2.add(table)
         self.set_canvas(self.table)
+
 
     def run_canvas(self):
         self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
@@ -100,6 +118,16 @@ class Activity(activity.Activity):
             self.actividad.set_background(self._image)
             #self.actividad.fondo = self._image
             #self.actividad.pantalla.blit(self._image, (0, 0))
+
+    def _add_point(self, widget, label="", value="0.0"):
+        #data = (label, float(value))
+        #if not data in self.chart_data:
+        pos = self.labels_and_values.add_value(label, value)
+        #self.chart_data.insert(pos, data)
+        #self._update_chart_data()
+
+    def _add_coor(self, pos):
+        self.labels_and_values.update_selected_value(pos)
 
     def read_file(self, file_path):
         pass
