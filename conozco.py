@@ -491,7 +491,15 @@ class Conozco():
             pos_c = (x - 8, y - 8)
             self.showName(name, pos_n, self.fuente9)
             self.pantalla.blit(self.simboloCiudad, pos_c)
-            
+
+    def getScale(self):
+        return scale
+
+    def getShiftX(self):
+        return shift_x
+
+    def getShiftY(self):
+        return shift_y
 
     def principal(self):
         """Este es el loop principal del juego"""

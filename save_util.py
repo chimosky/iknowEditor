@@ -11,6 +11,10 @@ def save(l):
     f.write("\n")
     f.write("from gettext import gettext as _\n")
     f.write("\n")
+    f.write("NAME = _('Place')\n")
+    f.write("\n")
+    f.write("STATES = []\n")
+    f.write("\n")
     f.write("CITIES = [\n")
     first = True
     for r in l:
@@ -27,3 +31,16 @@ def save(l):
     f.write('\n')
     f.write(']')
     f.close()
+
+
+def fixValues(data, scale, shift_x, shift_y):
+    l = []
+    for e in data:
+        name = e[0]
+        pos_x = int((e[1] - shift_x) / scale)
+        pos_y = int((e[2] - shift_y) / scale)
+        dx = e[3]
+        dy = e[4]
+        l.append((name, pos_x, pos_y, dx, dy))
+    return l
+

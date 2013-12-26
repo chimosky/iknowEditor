@@ -17,7 +17,7 @@ from gettext import gettext as _
 import sugargame.canvas
 import conozco
 from points_list import Data
-from save_util import save
+from save_util import save, fixValues
 
 class Activity(activity.Activity):
 
@@ -96,16 +96,11 @@ class Activity(activity.Activity):
         self.table.attach(self.box1, 0, 1, 0, 1)
         self.table.attach(self.box2, 1, 2, 0, 1)
         
-        
         self.labels_and_values = Data(self)
-
         self.labels_and_values.connect("some-changed", self._some_changed)
-
-
         self.box2.add(self.labels_and_values)
 
         self.set_canvas(self.table)
-
 
     def run_canvas(self):
         self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
@@ -116,7 +111,11 @@ class Activity(activity.Activity):
 
     def _save(self, widget):
         l = self.labels_and_values.get_info()
-        save(l)
+        scale = self.actividad.getScale()
+        shiftx = self.actividad.getShiftX()
+        shifty = self.actividad.getShiftY()
+        ready = fixValues(l, scale, shiftx, shifty)
+        save(ready)
 
     def _new_picture(self, widget):
         try:
