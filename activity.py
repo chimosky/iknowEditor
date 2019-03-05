@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import gi
+gi.require_version('Gtk', '3.0')
 import sys
-import gtk
 import pygame
 
-from sugar.activity import activity
-from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.activity.widgets import ActivityToolbarButton
-from sugar.graphics.toolbutton import ToolButton
-from sugar.activity.widgets import StopButton
-from sugar.graphics.objectchooser import ObjectChooser
+from gi.repository import Gtk
+
+from sugar3.activity.activity import Activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.activity.widgets import StopButton
+from sugar3.graphics.objectchooser import ObjectChooser
 
 from gettext import gettext as _
 
@@ -19,10 +22,11 @@ import conozco
 from points_list import Data
 from save_util import save, fixValues
 
-class Activity(activity.Activity):
+
+class IknowEditor(Activity):
 
     def __init__(self, handle):
-        activity.Activity.__init__(self, handle)
+        Activity.__init__(self, handle)
         self.init_vars()
         self.build_toolbar()
         self.actividad = conozco.Conozco(self)
@@ -33,10 +37,7 @@ class Activity(activity.Activity):
     def init_vars(self):
         self._image = None
 
-
-
     def build_toolbar(self):
-
         self.max_participants = 1
 
         toolbar_box = ToolbarBox()
@@ -71,7 +72,7 @@ class Activity(activity.Activity):
         toolbar_box.toolbar.insert(save, -1)
 
         # separator and stop button
-        separator = gtk.SeparatorToolItem()
+        separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
         toolbar_box.toolbar.insert(separator, -1)
@@ -83,13 +84,13 @@ class Activity(activity.Activity):
 
     def build_canvas(self):
 
-        self.table = gtk.Table(1, 2, False)
+        self.table = Gtk.Table(1, 2, False)
 
-        self.box1 = gtk.HBox()
+        self.box1 = Gtk.HBox()
         self.box1.set_size_request(350, 350)
         self.box1.show()
 
-        self.box2 = gtk.HBox()
+        self.box2 = Gtk.HBox()
         self.box2.set_size_request(50, 200)
         self.box2.show()
 
@@ -103,11 +104,12 @@ class Activity(activity.Activity):
         self.set_canvas(self.table)
 
     def run_canvas(self):
-        self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
-        self.box1.add(self._pygamecanvas)
+        self.actividad.canvas = sugargame.canvas.PygameCanvas(self,
+                                    main=self.actividad.run,
+                                    modules=[pygame.display, pygame.font])
+        self.box1.add(self.actividad.canvas)
 
-        self._pygamecanvas.grab_focus()
-        self._pygamecanvas.run_pygame(self.actividad.principal)
+        self.actividad.canvas.grab_focus()
 
     def _save(self, widget):
         l = self.labels_and_values.get_info()
@@ -125,7 +127,7 @@ class Activity(activity.Activity):
         f = None
         if chooser is not None:
             result = chooser.run()
-            if result == gtk.RESPONSE_ACCEPT:
+            if result == Gtk.ResponseType.ACCEPT:
                 dsobject = chooser.get_selected_object()
                 f = dsobject.file_path
         if f is not None:
@@ -149,5 +151,3 @@ class Activity(activity.Activity):
     def _update_points(self):
         l = self.labels_and_values.get_info()
         self.actividad.update_points(l)
-
-

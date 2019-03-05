@@ -32,12 +32,7 @@ import imp
 import gettext
 import ConfigParser
 from gettext import gettext as _
-
-gtk_present = True
-try:
-    import gtk
-except:
-    gtk_present = False
+from gi.repository import Gtk
 
 X_SIZE = 800.0
 Y_SIZE = 900.0
@@ -318,6 +313,9 @@ class Conozco():
         return imagen
 
     def __init__(self, parent):
+        # Set up a clock for managing the frame rate.
+        self.clock = pygame.time.Clock()
+
         self.parent = parent
         file_activity_info = ConfigParser.ConfigParser()
         activity_info_path = os.path.abspath('activity/activity.info')
@@ -479,8 +477,12 @@ class Conozco():
         self.pantalla.blit(t, r)
 
     def update_points(self, l):
-        self.pantalla.fill((0,0,0))
-        self.pantalla.blit(self.fondo, (shift_x, shift_y))
+        try:
+            self.pantalla.fill((0,0,0))
+            self.pantalla.blit(self.fondo, (shift_x, shift_y))
+        except BaseException:
+            pass
+
         for p in l:
             name = p[0]
             x = p[1]
@@ -501,8 +503,9 @@ class Conozco():
     def getShiftY(self):
         return shift_y
 
-    def principal(self):
+    def run(self):
         """Este es el loop principal del juego"""
+        self.running = True
         global scale, shift_x, shift_y
         pygame.time.set_timer(EVENTOREFRESCO,TIEMPOREFRESCO)
 
@@ -512,21 +515,21 @@ class Conozco():
 
         pygame.mouse.set_cursor((32,32), (1,1), *self.cursor)
 
-        while 1:
+        while self.running:
 
-            while gtk.events_pending():
-                gtk.main_iteration()
+            while Gtk.events_pending():
+                Gtk.main_iteration()
+            if not self.running:
+                break
 
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.QUIT:
+                    return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
                     pos = event.pos
                     #self.pantalla.blit(self.simboloCiudad, pos)
                     self.parent._add_coor(pos)
                     #print pos
 
-
-
             pygame.display.flip()
-
-
-
+            self.clock.tick(25)
